@@ -3,15 +3,11 @@ from celery import current_app
 from django.views import View
 from rest_framework import generics
 from .models import OrgDate, Doc, FiltersUpdatedLastMonth
-from .serializers import Tro, Lo
+from .serializers import Lo
 from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.response import Response
-from celery import shared_task
-from .tasks import task_update, checkingUp_to_date, shlep, parsIn_PDF
+from .tasks import task_update, checkingUp_to_date, parsIn_PDF
 from django.views.generic import TemplateView
 from django.shortcuts import render
-import xlsxwriter
 import xlwt
 
 from django.http import HttpResponse
@@ -48,14 +44,9 @@ def tableView(request):
         return render(request, 'home.html', context)
 
 
-def index(request):
-    task = shlep.delay(0.1)
-    return render(request, 'home.html', {'task_id': task.task_id})
-
 class getApi(generics.ListAPIView):
     queryset = OrgDate.objects.all()
     serializer_class = Lo
-
 
 class HomePageView(TemplateView):
     template_name = 'home.html'
@@ -71,7 +62,7 @@ def update_click(request):
 def pars_PDF(request):
     context = {}
     if request.method == 'POST':
-        task = parsIn_PDF.delay(0.001)
+        task = parsIn_PDF.delay(0.01)
         context['task_id'] = task.id
         context['task_status'] = task.status
         return render(request, 'home.html', context)
@@ -80,7 +71,6 @@ class APItro(APIView):
     def create(request):
         task_update.delay(request)
 
-
 class TaskView(View):
     def get(self, request, task_id):
         task = current_app.AsyncResult(task_id)
@@ -88,5 +78,6 @@ class TaskView(View):
         if task.status == 'SUCCESS':
             response_data['results'] = task.get()
         return JsonResponse(response_data)
+
 
 

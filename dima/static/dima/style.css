@@ -2,7 +2,7 @@
     width: 80%;
     font-family: 'Helvetica Neue', Arial, sans-serif;
     display: flex;
-    border: red 2px solid;
+    border: rgb(0, 255, 140) 3px solid;
     border-radius: 6px;
     flex-direction: column;
     margin:0 0 0 10%;

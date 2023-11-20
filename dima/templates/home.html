@@ -30,61 +30,21 @@
             <button type="submit" class="btn btn-lg btn-block">Обновить</button>
         </form>
         </div>
-        <div class="trolol">
-          <div class="lt_child">
-            <button type="submit" class="btn btn-lg btn-block">
-              <a class = 'color_text' href="{% url 'export_excel' %}">Excel файл со всеми ссылками </a>
-            </button>
-          </div>
-          <div class="lt_child left">
-            <button id="Show" value="Click to show" onclick=" document.getElementById('Show').style.display='none'; document.getElementById('Hide').style.display='block'; document.getElementById('SectionName').style.display='block'">Показать</button>
-
-            <form action="{% url 'tableView' %}" method="POST" enctype="multipart/form-data">
-              {% csrf_token %}
-              <button id="Hide" value="Click to hide" onclick=" document.getElementById('Show').style.display='block'; document.getElementById('Hide').style.display='none'; document.getElementById('SectionName').style.display='none'">Скрыть</button>
-            </form>
-          </div>
+        <div class="mainchildcont">
+          <button type="submit" class="btn btn-lg btn-block">
+            <a class = 'color_text' href="{% url 'export_excel' %}">Excel файл со всеми ссылками </a>
+          </button>
         </div>
         <div class="childcont">
           <form action="{% url 'pars_PDF' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <button type="submit" class="btn btn-lg btn-block">Создать отчет</button>
           </form>
-        </div>
-        <div class="childcont" id='SectionName' style="display:none">
-          <table>
-            <tbody>
-                <tr>
-                    <td>
-                      <ul  class="list_data">
-                        {% for book in filtr %}
-                        <li class="elem_list">{{ book.trun.name }}</li>
-                        <li class="elem_list">{{ book.trun.inn }}</li>
-                        <li class="elem_list"><a href="{{ book.url_doc }}">{{ book.url_doc }}</a></li>
-                        <p class = 'border_b'></p>
-                        {% endfor %}
-                      </ul>
-                    </td> 
-                </tr> 
-            </tbody>
-          </table> 
-        <script>
-          function ShowAndHide() {
-
-            var x = document.getElementById('SectionName');
-            if (x.style.display == 'none') {
-                x.style.display = 'block';
-            } else {
-                x.style.display = 'none';
-            }
-          }
-        </script>  
-        </div>    
+        </div>        
       </div>
-
       {% if task_id %}
       <script>
-        
+
         function processProgress(progressBarElement, progressBarMessageElement, progress) {
             progressBarElement.style.width = progress.percent;
             var description = progress.description || "Starting download";
@@ -101,7 +61,6 @@
             );
           }
         }
-
 
 
         // Progress Bar (JQuery)
